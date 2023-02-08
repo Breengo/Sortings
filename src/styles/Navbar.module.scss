@@ -1,0 +1,27 @@
+.navbar {
+  color: white;
+  padding: 30px 0 30px 0;
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  font-weight: bold;
+  font-size: 2em;
+  a {
+    transition: all 0.3s;
+    position: relative;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    &:hover {
+      box-shadow: white inset 2px 2px 10px;
+    }
+  }
+}
+
+.active {
+  box-shadow: white inset 0 0 5px;
+}

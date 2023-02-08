@@ -1,0 +1,12 @@
+.main {
+  height: 100vh;
+  width: 100%;
+  background: rgb(68, 30, 235);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    color: white;
+    font-size: 5em;
+  }
+}
