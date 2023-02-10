@@ -1,22 +1,50 @@
 import React from "react";
 import Head from "next/head";
-import styles from "@/styles/Home.module.scss";
-
-const array = [1, 4, 5, 13, 34, 23, 2, 5, 8, 9, 10];
+import styles from "@/styles/SortPagesStyles.module.scss";
+import NumberBlock from "@/components/NumberBlock";
 
 export default function Home() {
-  const bubbleSort = (arr: number[]) => {
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = 0; j < arr.length - 1; j++) {
-        if (arr[j] < arr[j + 1]) {
-          let temp = arr[j];
-          arr[j] = arr[j + 1];
-          arr[j + 1] = temp;
+  const sortStep = React.useRef(1);
+  const [reset, setReset] = React.useState(0);
+  const [blocked, setBlocked] = React.useState(false);
+  let interval: NodeJS.Timer;
+  const initialArray = [
+    1, 4, 5, 13, 34, 23, 2, 5, 8, 9, 10, 59, 32, 15, 26, 28, 30, 54, 78, 35,
+  ];
+  const [array, setArray] = React.useState(initialArray.slice(0));
+  const bubbleSort = (numArr: number[], step: number) => {
+    for (let i = 0; i < step; i++) {
+      for (let j = 0; j < numArr.length - 1; j++) {
+        if (numArr[j] < numArr[j + 1]) {
+          let temp = numArr[j];
+          numArr[j] = numArr[j + 1];
+          numArr[j + 1] = temp;
         }
       }
+      setArray(numArr);
     }
-    return arr;
   };
+
+  const resetHandler = () => {
+    sortStep.current = 1;
+    setReset(reset + 1);
+    setArray(initialArray.slice(0));
+  };
+
+  React.useEffect(() => {
+    if (!interval) {
+      interval = setInterval(() => {
+        if (sortStep.current < array.length) {
+          setBlocked(true);
+          sortStep.current = sortStep.current + 1;
+          bubbleSort(array.slice(0), sortStep.current);
+        } else {
+          setBlocked(false);
+          clearInterval(interval);
+        }
+      }, 1000);
+    }
+  }, [reset]);
 
   return (
     <>
@@ -27,8 +55,24 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <p>Bubble</p>
-        <canvas></canvas>
+        <div className={styles.container}>
+          <h1>Bubble</h1>
+          <div className={styles.diagram}>
+            {array.map((item, index) => (
+              <NumberBlock
+                maxNumber={Math.max(...array)}
+                height={item}
+                key={index}
+              />
+            ))}
+          </div>
+          <button
+            onClick={blocked ? undefined : resetHandler}
+            className={blocked ? styles.blockedButton : styles.button}
+          >
+            Reset
+          </button>
+        </div>
       </main>
     </>
   );

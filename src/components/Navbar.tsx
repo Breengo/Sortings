@@ -15,8 +15,7 @@ const navigation = [
   { id: 7, title: "Bucket", path: "/bucket" },
   { id: 8, title: "Heap", path: "/heap" },
   { id: 9, title: "Shell", path: "/shell" },
-  { id: 10, title: "Linear", path: "/linear" },
-  { id: 11, title: "Binary", path: "/binary" },
+  { id: 10, title: "Insertion", path: "/insertion" },
 ];
 
 const Navbar: React.FC<Props> = ({ children }) => {

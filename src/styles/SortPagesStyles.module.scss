@@ -1,0 +1,64 @@
+.main {
+  height: 100vh;
+  width: 100%;
+  background: rgb(68, 30, 235);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    color: white;
+    font-size: 5em;
+  }
+}
+
+.diagram {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border: 2px solid white;
+  width: 60%;
+  height: 40vh;
+  border-radius: 5px;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    color: white;
+  }
+}
+
+.button {
+  margin-top: 10px;
+  padding: 10px 0;
+  width: 60%;
+  cursor: pointer;
+  font-size: 2em;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(102, 88, 230);
+  border: 2px solid rgb(43, 23, 219);
+  transition: all 0.2s;
+  &:hover {
+    border: 2px solid white;
+    background-color: rgb(102, 88, 230);
+    color: white;
+  }
+}
+
+.blockedButton {
+  margin-top: 10px;
+  padding: 10px 0;
+  width: 60%;
+  cursor: pointer;
+  font-size: 2em;
+  border-radius: 5px;
+  background-color: rgb(51, 50, 50);
+  color: rgb(102, 88, 230);
+  border: 2px solid rgb(51, 50, 50);
+  transition: all 0.2s;
+}
