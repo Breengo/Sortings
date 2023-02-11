@@ -3,29 +3,38 @@ import Head from "next/head";
 import styles from "@/styles/SortPagesStyles.module.scss";
 import NumberBlock from "@/components/NumberBlock";
 
-export default function Home() {
+export const insertionSort = (
+  numArr: number[],
+  step: number,
+  setArray?: (arr: number[]) => void
+) => {
+  for (let i = 1; i < step; i++) {
+    for (let j = 0; j < i; j++) {
+      if (numArr[i] > numArr[j]) {
+        let temp = numArr[i];
+        numArr.splice(i, 1);
+        numArr.splice(j, 0, temp);
+
+        break;
+      }
+    }
+  }
+  if (setArray) {
+    setArray(numArr);
+  }
+  return numArr;
+};
+
+export default function Insertion() {
   const sortStep = React.useRef(2);
   const [reset, setReset] = React.useState(0);
+  const [blocked, setBlocked] = React.useState(false);
   const initialArray = [
     1, 4, 5, 13, 34, 23, 2, 5, 8, 9, 10, 59, 32, 15, 26, 28, 30, 54, 78, 35,
   ];
   let interval: NodeJS.Timer;
   const [array, setArray] = React.useState(initialArray.slice(0));
-  const insertionSort = (numArr: number[], step: number) => {
-    for (let i = 1; i < step; i++) {
-      for (let j = 0; j < i; j++) {
-        if (numArr[i] > numArr[j]) {
-          let temp = numArr[i];
-          numArr.splice(i, 1);
-          numArr.splice(j, 0, temp);
 
-          break;
-        }
-      }
-    }
-    setArray(numArr);
-    return numArr;
-  };
   const resetHandler = () => {
     sortStep.current = 1;
     setReset(reset + 1);
@@ -36,9 +45,11 @@ export default function Home() {
     if (!interval) {
       interval = setInterval(() => {
         if (sortStep.current < array.length) {
+          setBlocked(true);
           sortStep.current = sortStep.current + 1;
-          insertionSort(array.slice(0), sortStep.current);
+          insertionSort(array.slice(0), sortStep.current, setArray);
         } else {
+          setBlocked(false);
           clearInterval(interval);
         }
       }, 1000);
@@ -65,7 +76,10 @@ export default function Home() {
               />
             ))}
           </div>
-          <button onClick={resetHandler} className={styles.button}>
+          <button
+            onClick={blocked ? undefined : resetHandler}
+            className={blocked ? styles.blockedButton : styles.button}
+          >
             Reset
           </button>
         </div>

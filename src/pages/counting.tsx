@@ -3,6 +3,34 @@ import Head from "next/head";
 import styles from "@/styles/SortPagesStyles.module.scss";
 import NumberBlock from "@/components/NumberBlock";
 
+export const countingSort = (
+  numArr: number[],
+  step: number,
+  setArray?: (arr: number[]) => void
+) => {
+  const size = Math.max(...numArr);
+  const resultArr: number[] = [];
+  for (let i = 0; i < numArr.length; i++) {
+    resultArr.push(0);
+  }
+  let countArr: number[] = [];
+  for (let i = 0; i <= size; i++) {
+    countArr.push(0);
+  }
+  numArr.forEach((item) => (countArr[item] = countArr[item] + 1));
+  for (let i = 1; i <= size; i++) {
+    countArr[i] = countArr[i - 1] + countArr[i];
+  }
+  for (let i = 0; i < step; i++) {
+    resultArr[numArr.length - countArr[numArr[i]]] = numArr[i];
+    countArr[numArr[i]] = countArr[numArr[i]] - 1;
+  }
+  if (setArray) {
+    setArray(resultArr);
+  }
+  return resultArr;
+};
+
 export default function Home() {
   const sortStep = React.useRef(1);
   const [reset, setReset] = React.useState(0);
@@ -12,27 +40,6 @@ export default function Home() {
   ];
   let interval: NodeJS.Timer;
   const [array, setArray] = React.useState(initialArray.slice(0));
-  const countingSort = (numArr: number[], step: number) => {
-    const size = Math.max(...numArr);
-    const resultArr: number[] = [];
-    for (let i = 0; i < numArr.length; i++) {
-      resultArr.push(0);
-    }
-    let countArr: number[] = [];
-    for (let i = 0; i <= size; i++) {
-      countArr.push(0);
-    }
-    numArr.forEach((item) => (countArr[item] = countArr[item] + 1));
-    for (let i = 1; i <= size; i++) {
-      countArr[i] = countArr[i - 1] + countArr[i];
-    }
-    for (let i = 0; i < step; i++) {
-      resultArr[numArr.length - countArr[numArr[i]]] = numArr[i];
-      countArr[numArr[i]] = countArr[numArr[i]] - 1;
-    }
-    setArray(resultArr);
-    return resultArr;
-  };
   const resetHandler = () => {
     sortStep.current = 1;
     setReset(reset + 1);
@@ -45,7 +52,7 @@ export default function Home() {
       interval = setInterval(() => {
         if (sortStep.current < array.length) {
           sortStep.current = sortStep.current + 1;
-          countingSort(array.slice(0), sortStep.current);
+          countingSort(array.slice(0), sortStep.current, setArray);
         } else {
           setBlocked(false);
           clearInterval(interval);

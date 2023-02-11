@@ -3,49 +3,64 @@ import Head from "next/head";
 import styles from "@/styles/SortPagesStyles.module.scss";
 import NumberBlock from "@/components/NumberBlock";
 
-export default function Home() {
+const merge = async (
+  firstArray: number[],
+  secondArray: number[],
+  setArray?: (arr: number[]) => void
+) => {
+  const newArray: number[] = [];
+  while (firstArray.length > 0 && secondArray.length > 0) {
+    if (firstArray[0] > secondArray[0]) {
+      newArray.push(firstArray[0]);
+      firstArray.splice(0, 1);
+    } else {
+      newArray.push(secondArray[0]);
+      secondArray.splice(0, 1);
+    }
+  }
+  while (firstArray.length > 0) {
+    newArray.push(firstArray[0]);
+    firstArray.splice(0, 1);
+  }
+  while (secondArray.length > 0) {
+    newArray.push(secondArray[0]);
+    secondArray.splice(0, 1);
+  }
+  if (setArray) {
+    setArray(newArray);
+    await new Promise((r) => setTimeout(r, 800));
+  }
+  return newArray;
+};
+
+export const mergeSort = async (
+  numArr: number[],
+  setArray?: (arr: number[]) => void
+) => {
+  const length = numArr.length;
+  if (length === 0) return [];
+  if (length === 1) return [numArr[0]];
+  const firstArray: number[] = await mergeSort(
+    numArr.slice(0, length / 2),
+    setArray
+  );
+  const secondArray: number[] = await mergeSort(
+    numArr.slice(length / 2, length),
+    setArray
+  );
+  const result = merge(firstArray, secondArray, setArray);
+  return result;
+};
+
+export default function Merge() {
   const [reset, setReset] = React.useState(0);
   const [blocked, setBlocked] = React.useState(true);
   const initialArray = [
     1, 4, 5, 13, 34, 23, 2, 5, 8, 9, 10, 59, 32, 15, 26, 28, 30, 54, 78, 35,
   ];
-  let interval: NodeJS.Timer;
+
   const [array, setArray] = React.useState(initialArray.slice(0));
 
-  const merge = async (firstArray: number[], secondArray: number[]) => {
-    const newArray: number[] = [];
-    while (firstArray.length > 0 && secondArray.length > 0) {
-      if (firstArray[0] > secondArray[0]) {
-        newArray.push(firstArray[0]);
-        firstArray.splice(0, 1);
-      } else {
-        newArray.push(secondArray[0]);
-        secondArray.splice(0, 1);
-      }
-    }
-    while (firstArray.length > 0) {
-      newArray.push(firstArray[0]);
-      firstArray.splice(0, 1);
-    }
-    while (secondArray.length > 0) {
-      newArray.push(secondArray[0]);
-      secondArray.splice(0, 1);
-    }
-    setArray(newArray);
-    await new Promise((r) => setTimeout(r, 800));
-    return newArray;
-  };
-
-  const mergeSort = async (numArr: number[]) => {
-    const length = numArr.length;
-    if (length === 1) return [numArr[0]];
-    const firstArray: number[] = await mergeSort(numArr.slice(0, length / 2));
-    const secondArray: number[] = await mergeSort(
-      numArr.slice(length / 2, length)
-    );
-    const result = merge(firstArray, secondArray);
-    return result;
-  };
   const resetHandler = () => {
     setReset(reset + 1);
     setArray(initialArray.slice(0));
@@ -53,7 +68,7 @@ export default function Home() {
 
   React.useEffect(() => {
     setBlocked(true);
-    mergeSort(array.slice(0)).then(() => setBlocked(false));
+    mergeSort(array.slice(0), setArray).then(() => setBlocked(false));
   }, [reset]);
 
   return (

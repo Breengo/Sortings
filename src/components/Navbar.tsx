@@ -11,11 +11,8 @@ const navigation = [
   { id: 3, title: "Merge", path: "/merge" },
   { id: 4, title: "Quicksort", path: "/quicksort" },
   { id: 5, title: "Counting", path: "/counting" },
-  { id: 6, title: "Radix", path: "/radix" },
-  { id: 7, title: "Bucket", path: "/bucket" },
-  { id: 8, title: "Heap", path: "/heap" },
-  { id: 9, title: "Shell", path: "/shell" },
-  { id: 10, title: "Insertion", path: "/insertion" },
+  { id: 6, title: "Shell", path: "/shell" },
+  { id: 7, title: "Insertion", path: "/insertion" },
 ];
 
 const Navbar: React.FC<Props> = ({ children }) => {

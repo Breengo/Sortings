@@ -3,7 +3,33 @@ import Head from "next/head";
 import styles from "@/styles/SortPagesStyles.module.scss";
 import NumberBlock from "@/components/NumberBlock";
 
-export default function Home() {
+export const quickSort = async (
+  numArr: number[],
+  setArray?: (arr: number[]) => void
+) => {
+  if (numArr.length < 2) return numArr;
+  let pivot = numArr[0];
+  const left: number[] = [];
+  const right: number[] = [];
+
+  for (let i = 1; i < numArr.length; i++) {
+    if (pivot < numArr[i]) {
+      left.push(numArr[i]);
+    } else {
+      right.push(numArr[i]);
+    }
+  }
+  const rightResult = await quickSort(right, setArray);
+  const leftResult = await quickSort(left, setArray);
+  const result: number[] = await leftResult.concat(pivot, rightResult);
+  if (setArray) {
+    setArray(result);
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+  return result;
+};
+
+export default function Quicksort() {
   const [reset, setReset] = React.useState(0);
   const [blocked, setBlocked] = React.useState(true);
   const initialArray = [
@@ -11,27 +37,6 @@ export default function Home() {
   ];
   let interval: NodeJS.Timer;
   const [array, setArray] = React.useState(initialArray.slice(0));
-
-  const quickSort = async (numArr: number[]) => {
-    if (numArr.length < 2) return numArr;
-    let pivot = numArr[0];
-    const left: number[] = [];
-    const right: number[] = [];
-
-    for (let i = 1; i < numArr.length; i++) {
-      if (pivot < numArr[i]) {
-        left.push(numArr[i]);
-      } else {
-        right.push(numArr[i]);
-      }
-    }
-    const rightResult = await quickSort(right);
-    const leftResult = await quickSort(left);
-    const result: number[] = await leftResult.concat(pivot, rightResult);
-    await new Promise((r) => setTimeout(r, 1000));
-    setArray(result);
-    return result;
-  };
 
   const resetHandler = () => {
     setReset(reset + 1);
@@ -41,7 +46,7 @@ export default function Home() {
   React.useEffect(() => {
     setBlocked(true);
     let sortArray = array.slice(0);
-    quickSort(sortArray).then(() => setBlocked(false));
+    quickSort(sortArray, setArray).then(() => setBlocked(false));
   }, [reset]);
 
   return (

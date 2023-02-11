@@ -3,7 +3,27 @@ import Head from "next/head";
 import styles from "@/styles/SortPagesStyles.module.scss";
 import NumberBlock from "@/components/NumberBlock";
 
-export default function Home() {
+export const bubbleSort = (
+  numArr: number[],
+  step: number,
+  setArray?: (arr: number[]) => void
+) => {
+  for (let i = 0; i < step; i++) {
+    for (let j = 0; j < numArr.length - 1; j++) {
+      if (numArr[j] < numArr[j + 1]) {
+        let temp = numArr[j];
+        numArr[j] = numArr[j + 1];
+        numArr[j + 1] = temp;
+      }
+    }
+    if (setArray) {
+      setArray(numArr);
+    }
+  }
+  return numArr;
+};
+
+export default function Bubble() {
   const sortStep = React.useRef(1);
   const [reset, setReset] = React.useState(0);
   const [blocked, setBlocked] = React.useState(false);
@@ -12,18 +32,6 @@ export default function Home() {
     1, 4, 5, 13, 34, 23, 2, 5, 8, 9, 10, 59, 32, 15, 26, 28, 30, 54, 78, 35,
   ];
   const [array, setArray] = React.useState(initialArray.slice(0));
-  const bubbleSort = (numArr: number[], step: number) => {
-    for (let i = 0; i < step; i++) {
-      for (let j = 0; j < numArr.length - 1; j++) {
-        if (numArr[j] < numArr[j + 1]) {
-          let temp = numArr[j];
-          numArr[j] = numArr[j + 1];
-          numArr[j + 1] = temp;
-        }
-      }
-      setArray(numArr);
-    }
-  };
 
   const resetHandler = () => {
     sortStep.current = 1;
@@ -37,7 +45,7 @@ export default function Home() {
         if (sortStep.current < array.length) {
           setBlocked(true);
           sortStep.current = sortStep.current + 1;
-          bubbleSort(array.slice(0), sortStep.current);
+          bubbleSort(array.slice(0), sortStep.current, setArray);
         } else {
           setBlocked(false);
           clearInterval(interval);
