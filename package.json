@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
+    "cypress": "cypress open",
     "coverage": "jest --coverage"
   },
   "dependencies": {
@@ -23,8 +24,10 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "cypress": "^12.5.1",
     "jest": "^29.4.2",
     "jest-environment-jsdom": "^29.4.2",
+    "next-router-mock": "^0.9.1",
     "sass": "^1.58.0"
   }
 }

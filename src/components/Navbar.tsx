@@ -2,7 +2,7 @@ import styles from "../styles/Navbar.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
 type Props = {
-  children: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
+  children?: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
 };
 
 const navigation = [
