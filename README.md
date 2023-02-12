@@ -6,4 +6,4 @@
 + Cypress
 
 ## Demo:
-[https://sortings.vercel.app/](sortings.vercel.app)
+[sortings.vercel.app](https://sortings.vercel.app/)
